@@ -9,10 +9,6 @@ SYMBOL = 'BNBBUSD'
 SELL_ORDER_MAX = 3
 BUY_ORDER_MAX = 3
 client = Binance::Spot.new(key: ENV['KEY'], secret: ENV['SECRET'])
-balance_bnb = client.account[:balances].select{ |bal| bal[:asset] == "BNB"}.first
-free_balance_bnb = balance_bnb[:free].to_f
-balance_busd = client.account[:balances].select{ |bal| bal[:asset] == "BUSD"}.first
-free_balance_busd = balance_busd[:free].to_f
 
 def can_sell?(free_balance_bnb, sell_orders)
     return false if sell_orders.count >= SELL_ORDER_MAX
@@ -30,9 +26,17 @@ while true
     p "===== START ====="
     cnt = 0
     prices = []
+
+    balance_bnb = client.account[:balances].select{ |bal| bal[:asset] == "BNB"}.first
+    free_balance_bnb = balance_bnb[:free].to_f
+    balance_busd = client.account[:balances].select{ |bal| bal[:asset] == "BUSD"}.first
+    free_balance_busd = balance_busd[:free].to_f
+
+    p "Free BNB: #{free_balance_bnb}"
+    p "Free BUSD: #{free_balance_busd}"
     10.times do
         sleep INTERVAL_TIME
-        p last_price = client.ticker_24hr(symbol: SYMBOL)[:lastPrice].to_f
+        last_price = client.ticker_24hr(symbol: SYMBOL)[:lastPrice].to_f
         prices.push last_price
     end
     avg_price = prices.sum/(prices.size)
