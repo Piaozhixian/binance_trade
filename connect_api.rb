@@ -24,6 +24,7 @@ while true
     sleep 60
 
     p "===== START ====="
+    p Time.now
     cnt = 0
     prices = []
 
