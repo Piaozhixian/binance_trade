@@ -84,6 +84,7 @@ GEM
       zeitwerk (~> 2.5)
     rake (13.0.6)
     ruby2_keywords (0.0.5)
+    slack-incoming-webhooks (0.3.0)
     thor (1.2.1)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -103,6 +104,7 @@ PLATFORMS
 DEPENDENCIES
   binance-connector-ruby
   dotenv-rails
+  slack-incoming-webhooks
 
 BUNDLED WITH
    2.1.4
