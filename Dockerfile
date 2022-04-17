@@ -16,4 +16,3 @@ RUN bundle install
 
 COPY . /myapp
 # ローカルのmyapp配下のファイルをコンテナ内のmyapp配下にコピー
-CMD ["bundle", "exec", "ruby", "./main.rb"]
