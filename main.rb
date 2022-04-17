@@ -7,8 +7,8 @@ Dotenv.load
 INTERVAL_TIME_CALC_AVG = 5
 INTERVAL_TIME_DO = 60
 
-QUANTITY_BNB = 0.03 * 1.5
-QUANTITY_BUSD = 12 * 1.5
+QUANTITY_BNB = 0.025
+QUANTITY_BUSD = 12
 SYMBOL = 'BNBBUSD'
 SELL_ORDER_MAX = 50
 BUY_ORDER_MAX = 50
@@ -44,7 +44,7 @@ def calc_price(avg_price, buy_orders, sell_orders)
     buy_price = avg_price * 0.997
   elsif sell_rate <= 0.3
     sell_price = avg_price * 1.0012
-    buy_price = avg_price * 0.999
+    buy_price = avg_price * 0.9999
   else
     sell_price = avg_price * 1.001
     buy_price = avg_price * 0.999
@@ -60,8 +60,10 @@ while true
 
     balance_bnb = client.account[:balances].select { |bal| bal[:asset] == 'BNB' }.first
     free_balance_bnb = balance_bnb[:free].to_f
+    locked_balance_bnb = balance_bnb[:locked].to_f
     balance_busd = client.account[:balances].select { |bal| bal[:asset] == 'BUSD' }.first
     free_balance_busd = balance_busd[:free].to_f
+    locked_balance_busd = balance_busd[:locked].to_f
 
     p "Free BNB: #{free_balance_bnb}"
     p "Free BUSD: #{free_balance_busd}"
@@ -77,8 +79,10 @@ while true
 
     avg_price = prices.sum / prices.size
     price = calc_price(avg_price, buy_orders, sell_orders)
-    buy_price = price[:buy_price].round(1)
-    sell_price = price[:sell_price].round(1)
+    buy_price = price[:buy_price] > prices.last ? prices.last : price[:buy_price]
+    buy_price = buy_price.round(1)
+    sell_price = price[:sell_price] < prices.last ? prices.last : price[:sell_price]
+    sell_price = sell_price.round(1)
 
     p "avg_price:#{avg_price}"
     p "buy_price:#{buy_price}"
@@ -92,7 +96,8 @@ while true
       response_buy = client.new_order(symbol: SYMBOL, side: 'BUY', price: buy_price, quantity: QUANTITY_BNB,
                                       type: 'LIMIT', timeInForce: 'GTC')
       p response_buy
-      slack.post "Buy: Price: #{response_sell[:price].to_f.round(1)}, Quantity: #{response_sell[:origQty].to_f.round(3)}"
+      slack.post "Buy: Price: #{response_buy[:price].to_f.round(1)}, Quantity: #{response_sell[:origQty].to_f.round(3)}"
+      slack.post "Balance: BNB:#{free_balance_bnb.to_f + locked_balance_bnb.to_f}, BUSD:#{free_balance_busd.to_f + locked_balance_busd.to_f}"
     end
     p '===== END ====='
   rescue StandardError => e
