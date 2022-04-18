@@ -5,7 +5,7 @@ require 'slack/incoming/webhooks'
 Dotenv.load
 
 INTERVAL_TIME_CALC_AVG = 5
-INTERVAL_TIME_DO = 60
+INTERVAL_TIME_DO = 60 * 10
 
 QUANTITY_BNB = 0.025
 QUANTITY_BUSD = 12
@@ -92,12 +92,14 @@ while true
       response_sell = client.new_order(symbol: SYMBOL, side: 'SELL', price: sell_price, quantity: QUANTITY_BNB,
                                        type: 'LIMIT', timeInForce: 'GTC')
       p response_sell
-      slack.post "Sell: Price: #{response_sell[:price].to_f.round(1)}, Quantity: #{response_sell[:origQty].to_f.round(3)}"
       response_buy = client.new_order(symbol: SYMBOL, side: 'BUY', price: buy_price, quantity: QUANTITY_BNB,
                                       type: 'LIMIT', timeInForce: 'GTC')
       p response_buy
-      slack.post "Buy: Price: #{response_buy[:price].to_f.round(1)}, Quantity: #{response_sell[:origQty].to_f.round(3)}"
-      slack.post "Balance: BNB:#{free_balance_bnb.to_f + locked_balance_bnb.to_f}, BUSD:#{free_balance_busd.to_f + locked_balance_busd.to_f}"
+      slack.post "BuyPrice: #{response_buy[:price].to_f.round(1)}, SellPrice:#{response_sell[:price].to_f.round(1)} Avg:#{avg_price.round(1)}"
+      slack.post "Balance: BNB=>#{
+        free_balance_bnb.to_f.round(2) + locked_balance_bnb.to_f
+      } + BUSD=>#{free_balance_busd.to_f.round(2) + locked_balance_busd.to_f.round(2)} = #{((free_balance_bnb.to_f.round(2) + locked_balance_bnb.to_f.round(2)) * avg_price + free_balance_busd.to_f + locked_balance_busd.to_f).round(2)}USD"
+
     end
     p '===== END ====='
   rescue StandardError => e
