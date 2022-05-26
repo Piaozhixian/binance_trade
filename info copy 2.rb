@@ -4,7 +4,7 @@ require 'slack/incoming/webhooks'
 
 Dotenv.load
 
-SYMBOL = 'BNBBUSD'
+SYMBOL = 'GMTBUSD'
 
 client = Binance::Spot.new(key: ENV['KEY'], secret: ENV['SECRET'])
 slack = Slack::Incoming::Webhooks.new ENV['WEBHOOK_URL']
