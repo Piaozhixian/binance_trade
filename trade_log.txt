@@ -1,2 +1,2 @@
-2022-05-27 07:39:26 +0900
-{:symbol=>"GMTBUSD", :orderId=>362326501, :orderListId=>-1, :clientOrderId=>"1NjDbLFQUoiSnaArK0gRNz", :transactTime=>1653604766374, :price=>"0.00000000", :origQty=>"14.00000000", :executedQty=>"14.00000000", :cummulativeQuoteQty=>"12.77766000", :status=>"FILLED", :timeInForce=>"GTC", :type=>"MARKET", :side=>"BUY", :fills=>[{:price=>"0.91269000", :qty=>"14.00000000", :commission=>"0.01400000", :commissionAsset=>"GMT", :tradeId=>28218906}]}
+2022-05-27 23:28:14 +0900
+{:symbol=>"GMTBUSD", :orderId=>368619827, :orderListId=>-1, :clientOrderId=>"7Y7u5dVY2CdwvR2gYznSx0", :transactTime=>1653661694671, :price=>"0.00000000", :origQty=>"26.00000000", :executedQty=>"26.00000000", :cummulativeQuoteQty=>"27.95676000", :status=>"FILLED", :timeInForce=>"GTC", :type=>"MARKET", :side=>"SELL", :fills=>[{:price=>"1.07526000", :qty=>"26.00000000", :commission=>"0.00006849", :commissionAsset=>"BNB", :tradeId=>28786811}]}
